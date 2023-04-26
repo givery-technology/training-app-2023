@@ -2,26 +2,26 @@
 ## docker-compose structure
 
 - backend: 
-  - go: 1.18.0
-  - air: 1.29.0
+  - go: 1.20.0
+  - air: 1.43.0
     - https://github.com/cosmtrek/air
 - frontend:
   - node:16.14.2
   - create-react-app: 5.0.1
     - https://create-react-app.dev/docs/getting-started
-  - react: 18.0.0
+  - react: 18
     - https://reactjs.org/docs/getting-started.html
-  - @reduxjs/toolkit: 1.8.1
+  - @reduxjs/toolkit: 1.9
     - https://redux-toolkit.js.org/introduction/getting-started
-  - react-redux: 8.0.0
+  - react-redux: 8
     - https://react-redux.js.org/introduction/getting-started
-  - react-router-dom: 6.3.0
+  - react-router-dom: 6
     - https://v5.reactrouter.com/web/guides/philosophy
-  - bootstrap: 5.1.3
+  - bootstrap: 5
     - https://getbootstrap.com/docs/5.1/getting-started/introduction/
-  - classnames: 2.3.1
+  - classnames: 2.3
     - https://github.com/JedWatson/classnames
-  - typescript: 4.6.3
+  - typescript: 5
     - https://www.typescriptlang.org/docs/
 - db: 
   - mysql: 8.0.28

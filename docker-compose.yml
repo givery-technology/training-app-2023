@@ -20,8 +20,8 @@ services:
       - '3000:3000'
     volumes:
       - ./frontend:/home/node/myapp
-      # - /home/node/myapp/node_modules
-    command: "bash -c 'npm i && npm run start'"
+      - /home/node/myapp/node_modules
+    command: "bash -c 'npm i && npm run dev'"
     environment:
       TZ: Asia/Tokyo
   db:

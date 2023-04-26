@@ -1,4 +1,4 @@
-@use '~bootstrap/scss/bootstrap.scss' as *;
+@import "../node_modules/bootstrap/scss/bootstrap";
 
 .app-root {
   height: 100vh;
