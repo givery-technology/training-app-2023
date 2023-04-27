@@ -47,6 +47,11 @@ host$ docker-compose exec db sh -c "mysql < /sqlscripts/create.sql"
 host$ docker-compose exec db sh -c "mysql training < /sqlscripts/insert.sql"
 ```
 
+Reactを開発する人はブラウザの拡張機能をインストールしてください。(任意)
+
+- React Developer Tools
+- Redux DevTools
+
 ## How to connect database
 
 ```
@@ -75,3 +80,12 @@ frontend$ npm install something
 ```
 
 `npm install`はホストOS側で実行してもコンテナにファイルが共有されますが、`node gyp`を使うようなライブラリの場合バイナリに差分が出る可能性があるのでコンテナ側で実行する方が望ましいです。
+
+VS Codeなどで開発する場合、コンテナ側にインストールされたモジュールが参照できないために、エディター上でエラーが表示される場合があります。
+
+その場合はお手数ですが、ホストOS側でもモジュールのインストールをお願いします。
+
+```
+host$ cd frontend
+host$ npm install
+```
