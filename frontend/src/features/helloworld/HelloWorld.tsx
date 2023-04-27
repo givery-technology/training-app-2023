@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-import { useAppDispatch, useAppSeletor } from '../../shared/hooks';
+import { useAppDispatch, useAppSelector } from '../../shared/hooks';
 import { APIService } from '../../shared/services';
 
 export function HelloWorld() {
-  const { hello } = useAppSeletor((state) => state.hello);
+  const { hello } = useAppSelector((state) => state.hello);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
