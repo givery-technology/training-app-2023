@@ -7,8 +7,6 @@
     - https://github.com/cosmtrek/air
 - frontend:
   - node:16.14.2
-  - create-react-app: 5.0.1
-    - https://create-react-app.dev/docs/getting-started
   - react: 18
     - https://reactjs.org/docs/getting-started.html
   - @reduxjs/toolkit: 1.9
