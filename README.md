@@ -88,11 +88,22 @@ host$ npm install
 
 [(プロ向け)Dockerの中のNode使うのいやだと思った人向けの脱獄の手引き](https://github.com/givery-technology/training-app-2023/wiki/Docker%E3%81%AE%E4%B8%AD%E3%81%AENode%E4%BD%BF%E3%81%86%E3%81%AE%E3%81%84%E3%82%84%E3%81%A0%E3%81%A8%E6%80%9D%E3%81%A3%E3%81%9F%E4%BA%BA%E5%90%91%E3%81%91%E3%81%AE%E8%84%B1%E7%8D%84%E3%81%AE%E6%89%8B%E5%BC%95%E3%81%8D)
 
-# ディレクトリ構成
+## ディレクトリ構成
 
-## Backend
+### Backend
+```
+backend/
+  internal/ : ソースコード
+    config/ : 設定類
+    entities/ : モデル/エンティティ
+    external/ : 外部環境との接続定義
+    interfaces/ : インターフェース
+    middleware/ : ginのmiddleware
+    repositories/ : リポジトリ - systemに近い部分の実装
+    usecases/ : ユースケース - ビジネスに近い部分の実装    
+```
 
-## Frontend
+### Frontend
 
 ```
 frontend/
