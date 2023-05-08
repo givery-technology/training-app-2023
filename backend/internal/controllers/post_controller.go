@@ -64,3 +64,68 @@ func GetPost(ctx *gin.Context) {
 		handleError(ctx, 404, errors.New("Not found"))
 	}
 }
+
+func CreatePost(ctx *gin.Context) {
+	user := User(ctx)
+	var input entities.PostCreateInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		handleError(ctx, 400, errors.New("Invalid input"))
+		return
+	}
+	input.UserId = user.Id
+	if err := input.Validate(); err != nil {
+		handleError(ctx, 400, err)
+	}
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewCreatePostUsecase(repository)
+	result, err := usecase.Execute(&input)
+	if err != nil {
+		handleError(ctx, 400, err)
+	} else {
+		ctx.JSON(200, result)
+	}
+}
+
+func UpdatePost(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		handleError(ctx, 400, errors.New(fmt.Sprintf("Invalid id: %v", idStr)))
+		return
+	}
+	user := User(ctx)
+	var input entities.PostUpdateInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		handleError(ctx, 400, errors.New("Invalid input"))
+		return
+	}
+	if err := input.Validate(); err != nil {
+		handleError(ctx, 400, err)
+	}
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewUpdatePostUsecase(repository)
+	result, err := usecase.Execute(user, entities.PostId(id), &input)
+	if err != nil {
+		handleError(ctx, 400, err)
+	} else {
+		ctx.JSON(200, result)
+	}
+}
+
+func DeletePost(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		handleError(ctx, 400, errors.New(fmt.Sprintf("Invalid id: %v", idStr)))
+		return
+	}
+	user := User(ctx)
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewDeletePostUsecase(repository)
+	err = usecase.Execute(user, entities.PostId(id))
+	if err != nil {
+		handleError(ctx, 400, err)
+	} else {
+		ctx.Status(204)
+	}
+}
