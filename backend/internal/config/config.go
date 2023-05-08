@@ -11,6 +11,7 @@ var CorsAllowOrigin = "http://localhost:3000"
 var DBHostName = "db"
 var DBPort = 3306
 var DBName = "training"
+var JwtSecret = "vJJo2sKekHQ0Noks"
 
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
@@ -30,5 +31,8 @@ func init() {
 	}
 	if v := os.Getenv("DB_NAME"); v != "" {
 		DBName = v
+	}
+	if v := os.Getenv("JWT_SECRET"); v != "" {
+		JwtSecret = v
 	}
 }
