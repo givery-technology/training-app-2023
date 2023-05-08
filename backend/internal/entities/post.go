@@ -9,13 +9,14 @@ import (
 type PostId uint
 
 type Post struct {
-	Id        PostId    `json:"id"`
-	Title     string    `json:"title"`
-	Body      string    `json:"body"`
-	UserId    UserId    `json:"user_id"`
-	UserName  string    `json:"username"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Id        PostId     `json:"id"`
+	Title     string     `json:"title"`
+	Body      string     `json:"body"`
+	UserId    UserId     `json:"user_id"`
+	UserName  string     `json:"username"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
+	Comments  []*Comment `json:"comments"`
 }
 
 type PostCreateInput struct {
