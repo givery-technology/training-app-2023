@@ -8,8 +8,10 @@ export type ButtonProps = {
     | 'light'
     | 'outline-primary'
     | 'outline-secondary'
-    | 'outline-light';
-  children: React.ReactNode;
+    | 'outline-light'
+    | 'link'
+    | 'danger';
+  children?: React.ReactNode;
 } & DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement

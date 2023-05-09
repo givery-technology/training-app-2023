@@ -8,12 +8,20 @@
   padding: 1rem;
 
   .app-post-list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid $gray-300;
   }
 
-  .app-post-list-item {
-    &:not(:last-child) {
-      border-bottom: 1px solid $gray-300;
+  .app-post-list__body {
+    padding-bottom: 3rem;
+
+    .app-post-list-item {
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-300;
+      }
     }
   }
 }
