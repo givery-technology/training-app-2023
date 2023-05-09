@@ -88,7 +88,7 @@ jobs:
           cluster-name: dena-training-2023
           service-name: dena-training-2023-team0-backend
           family: dena-training-2023-team0
-          container-image-name-updates: "container=web,tag=$(echo $CIRCLE_SHA1 | cut -c 1-8)"
+          container-image-name-updates: "container=backend,tag=$(echo $CIRCLE_SHA1 | cut -c 1-8)"
           verify-revision-is-deployed: true
           max-poll-attempts: 100
   deploy-frontend:
