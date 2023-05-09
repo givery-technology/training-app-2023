@@ -2,10 +2,11 @@ package external
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"myapp/internal/config"
 	"os"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -16,7 +17,11 @@ func SetupDB() {
 	host := config.DBHostName
 	port := config.DBPort
 	dbname := config.DBName
-	dsn := fmt.Sprintf("root@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", host, port, dbname)
+	username := config.DBUserName
+	if config.DBPassword != "" {
+		username += ":" + config.DBPassword
+	}
+	dsn := fmt.Sprintf("%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", username, host, port, dbname)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
