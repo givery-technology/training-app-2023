@@ -1,6 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { Hello, PostList, Post, APIListResponse, User } from '../models';
+import {
+  Hello,
+  PostList,
+  Post,
+  APIListResponse,
+  User,
+  Comment,
+} from '../models';
 
 const customFetch = async (input: RequestInfo, init?: RequestInit) => {
   const response = await fetch(input, {
@@ -63,6 +70,36 @@ export const deletePost = createAsyncThunk<Post, number>(
   'deletePost',
   async (postId) => {
     return await customFetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
+      method: 'delete',
+    });
+  }
+);
+
+export const createComment = createAsyncThunk<
+  Comment,
+  { postId: number; body: string }
+>('createComment', async (data) => {
+  const { postId, body } = data;
+  return await customFetch(`${API_ENDPOINT_PATH}/comments`, {
+    method: 'post',
+    body: JSON.stringify({ post_id: postId, body }),
+  });
+});
+
+export const updateComment = createAsyncThunk<
+  Comment,
+  { commentId: number; body: string }
+>('updateComment', async ({ commentId, ...body }) => {
+  return await customFetch(`${API_ENDPOINT_PATH}/comments/${commentId}`, {
+    method: 'put',
+    body: JSON.stringify(body),
+  });
+});
+
+export const deleteComment = createAsyncThunk<Comment, number>(
+  'deleteComment',
+  async (commentId) => {
+    return await customFetch(`${API_ENDPOINT_PATH}/comments/${commentId}`, {
       method: 'delete',
     });
   }
