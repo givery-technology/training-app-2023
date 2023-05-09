@@ -1,4 +1,4 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import '../node_modules/bootstrap/scss/bootstrap';
 
 .app-post-list {
   display: flex;
@@ -11,13 +11,9 @@
     border-bottom: 1px solid $gray-300;
   }
 
-  .app-post-list__body {
-    padding-bottom: 3rem;
-
-    .app-post-list-item {
-      &:not(:last-child) {
-        border-bottom: 1px solid $gray-300;
-      }
+  .app-post-list-item {
+    &:not(:last-child) {
+      border-bottom: 1px solid $gray-300;
     }
   }
 }

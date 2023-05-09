@@ -1,0 +1,25 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: $blue-700;
+  color: $white;
+  height: 3rem;
+  padding: 0 1rem;
+
+  .app-header__logo {
+    color: $white;
+    text-decoration: none;
+  }
+
+  .app-header__user-name {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}

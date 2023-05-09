@@ -19,7 +19,7 @@ export function PostList() {
       <header className="app-post-list__header">
         <h1>投稿一覧</h1>
       </header>
-      <section className="app-post-list__body">
+      <section>
         {posts.map((post) => (
           <PostListItem key={post.id} post={post} />
         ))}
