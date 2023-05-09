@@ -75,7 +75,7 @@ jobs:
           command: |
             frontend=/tmp/output/frontend
             mkdir $frontend
-            cp -r frontend/build $frontend
+            cp -r frontend/dist $frontend
       - persist_to_workspace:
             root: /tmp/output
             paths:
@@ -98,7 +98,7 @@ jobs:
           at: /tmp/output
       - aws-cli/setup
       - aws-s3/sync:
-          from: /tmp/output/frontend/build
+          from: /tmp/output/frontend/dist
           to: 's3://dena-training-2023/team0'
 
 workflows:
@@ -133,7 +133,7 @@ workflows:
           workspace-root: /tmp/output
           path: /tmp/output/backend
           requires:
-            - build-frontend
+            - build-backend
       - deploy-backend:
           requires:
             - ecr-push-backend
