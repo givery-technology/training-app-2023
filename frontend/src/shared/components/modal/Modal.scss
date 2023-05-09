@@ -1,0 +1,6 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.app-c-modal {
+  display: block !important;
+  background-color: transparentize($black, 0.75);
+}

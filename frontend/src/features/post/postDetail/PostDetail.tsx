@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { actions } from '../../../shared/store';
+import { Comment } from '../../../shared/models';
 import { useAppDispatch, useAppSelector } from '../../../shared/hooks';
 import { APIService, DateService } from '../../../shared/services';
-import { Button } from '../../../shared/components';
+import { Button, Modal } from '../../../shared/components';
+import { PostComment } from '../partials';
 
 import './PostDetail.scss';
 
@@ -20,6 +22,21 @@ export function PostDetail() {
   const { user } = useAppSelector((state) => state.user);
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [postComment, setPostComment] = useState<{
+    show: boolean;
+    comment?: Comment;
+  }>({
+    show: false,
+  });
+  const [commentDelete, setCommentDelete] = useState<{
+    show: boolean;
+    comment?: Comment;
+  }>({
+    show: false,
+  });
+
+  const [creating, setCreating] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -32,18 +49,62 @@ export function PostDetail() {
     if (deleting && !submitting) {
       dispatch(actions.showToast('削除しました。'));
       setDeleting(false);
-      setShowDeleteConfirm(false);
-      navigate('/', { replace: true });
+      onCloseModal();
+      if (showDeleteConfirm) {
+        navigate('/', { replace: true });
+      }
     }
-  }, [submitting, deleting, navigate, dispatch]);
+  }, [submitting, deleting, showDeleteConfirm, navigate, dispatch]);
+
+  useEffect(() => {
+    if (updating && !submitting) {
+      dispatch(actions.showToast('保存しました。'));
+      setUpdating(false);
+      onHideComment();
+    }
+  }, [submitting, updating, dispatch]);
+
+  useEffect(() => {
+    if (creating && !submitting) {
+      dispatch(actions.showToast('追加しました。'));
+      setCreating(false);
+      onHideComment();
+    }
+  }, [submitting, creating, dispatch]);
 
   const onDelete = () => {
     setDeleting(true);
     dispatch(APIService.deletePost(postId));
+    onCloseModal();
+    if (showDeleteConfirm) {
+      navigate('/', { replace: true });
+    }
+  };
+
+  const onCreateComment = (body: string) => {
+    setCreating(true);
+    dispatch(APIService.createComment({ postId, body }));
+  };
+
+  const onUpdateComment = (commentId: number, body: string) => {
+    setUpdating(true);
+    dispatch(APIService.updateComment({ commentId, body }));
+  };
+
+  const onDeleteComment = () => {
+    if (commentDelete.comment) {
+      setDeleting(true);
+      dispatch(APIService.deleteComment(commentDelete.comment.id));
+    }
   };
 
   const onCloseModal = () => {
     setShowDeleteConfirm(false);
+    setCommentDelete({ show: false });
+  };
+
+  const onHideComment = () => {
+    setPostComment({ show: false });
   };
 
   return (
@@ -75,8 +136,9 @@ export function PostDetail() {
         </div>
       </header>
       <section className="app-post-detail__body">{post?.body}</section>
-      <footer className="app-post-detail__footer">
-        <div className="app-post-detail__footer-buttons">
+      <section className="app-post-detail__action">
+        <div className="app-post-detail__action-buttons">
+          {' '}
           {user?.id === post?.user_id && (
             <>
               <Button
@@ -91,32 +153,73 @@ export function PostDetail() {
             </>
           )}
         </div>
-        <div className="app-post-detail__footer-user">{post?.username}</div>
-      </footer>
+        <div className="app-post-detail__action-user">{post?.username}</div>
+      </section>
+      <section className="app-post-detail__comments">
+        {post?.comments.map((comment) => (
+          <PostComment
+            key={comment.id}
+            isEdit={comment.id === postComment.comment?.id}
+            comment={comment}
+            onClickSave={(body) => onUpdateComment(comment.id, body)}
+            onClickEdit={() => setPostComment({ show: true, comment })}
+            onClickCancel={onHideComment}
+            onClickDelete={() => setCommentDelete({ show: true, comment })}
+          />
+        ))}
+      </section>
+      <div className="app-post-detail__add-comment">
+        {user &&
+          (postComment.show && postComment.comment === undefined ? (
+            <PostComment
+              isEdit={true}
+              onClickCancel={onHideComment}
+              onClickSave={onCreateComment}
+            />
+          ) : (
+            <Button
+              color="primary"
+              onClick={() => setPostComment({ show: true })}
+            >
+              コメントを追加する
+            </Button>
+          ))}
+      </div>
       {showDeleteConfirm && (
-        <div className="modal app-post-detail__delete-modal" tabIndex={-1}>
-          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">投稿の削除</h5>
-                <Button
-                  type="button"
-                  className="btn-close"
-                  onClick={onCloseModal}
-                />
-              </div>
-              <div className="modal-body">
-                <p>投稿を削除します。よろしいですか？</p>
-              </div>
-              <div className="modal-footer">
-                <Button onClick={onCloseModal}>キャンセル</Button>
-                <Button color="danger" onClick={onDelete}>
-                  削除する
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          headerElement="投稿の削除"
+          bodyElement={<p>投稿を削除します。よろしいですか？</p>}
+          footerElement={
+            <>
+              <Button onClick={onCloseModal}>キャンセル</Button>
+              <Button color="danger" onClick={onDelete}>
+                削除する
+              </Button>
+            </>
+          }
+          onClickClose={onCloseModal}
+        />
+      )}
+      {commentDelete.show && commentDelete.comment && (
+        <Modal
+          headerElement="コメントの削除"
+          bodyElement={<p>コメントを削除します。よろしいですか？</p>}
+          footerElement={
+            <>
+              <Button onClick={onCloseModal} disabled={submitting}>
+                キャンセル
+              </Button>
+              <Button
+                color="danger"
+                onClick={onDeleteComment}
+                disabled={submitting}
+              >
+                削除する
+              </Button>
+            </>
+          }
+          onClickClose={onCloseModal}
+        />
       )}
     </div>
   );

@@ -1,0 +1,35 @@
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+.app-post-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .app-post-comment__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .app-post-comment__comment {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .app-post-comment__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+
+    .app-post-comment__footer-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .app-post-comment__updated-at {
+      color: $gray-500;
+    }
+  }
+}

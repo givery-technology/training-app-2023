@@ -36,28 +36,40 @@
   }
 
   .app-post-detail__body {
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
     white-space: pre-wrap;
     overflow-wrap: break-word;
   }
 
-  .app-post-detail__footer {
+  .app-post-detail__action {
     display: flex;
     justify-content: space-between;
 
-    .app-post-detail__footer-buttons {
+    .app-post-detail__action-buttons {
       display: flex;
       gap: 1rem;
     }
 
-    .app-post-detail__footer-user {
+    .app-post-detail__action-user {
       padding: 0.5rem 1rem;
       background: $blue-100;
     }
   }
 
-  .app-post-detail__delete-modal {
-    display: block;
-    background-color: transparentize($black, 0.75);
+  .app-post-detail__comments {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 2rem;
+
+    .app-post-comment {
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-300;
+      }
+    }
+  }
+
+  .app-post-detail__add-comment {
+    padding-bottom: 3rem;
   }
 }
