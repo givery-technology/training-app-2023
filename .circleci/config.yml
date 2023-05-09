@@ -1,0 +1,142 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@2.1.0
+  aws-ecr: circleci/aws-ecr@7.3.0
+  aws-ecs: circleci/aws-ecs@2.2.1
+  aws-s3: circleci/aws-s3@3.0.0
+
+executors:
+  custom-ecr:
+    docker:
+      - image: cimg/base:2021.07
+
+jobs:
+  build-backend:
+    working_directory: ~/repo
+    docker:
+      - image: cimg/go:1.20
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "backend/go.sum" }}
+      - run:
+          name: Install Dependencies
+          command: go mod download
+          working_directory: backend
+      - save_cache:
+          key: go-mod-v4-{{ checksum "backend/go.sum" }}
+          paths:
+            - "/home/circleci/go/pkg/mod"
+      - run:
+          name: Build
+          command: go build -o myapp
+          working_directory: backend
+      - run:
+          name: Prepare for docker build
+          command: |
+            mkdir /tmp/output
+            backend=/tmp/output/backend
+            mkdir $backend
+            cp backend/myapp $backend
+            cp docker/ci-backend.Dockerfile $backend/Dockerfile
+      - persist_to_workspace:
+            root: /tmp/output
+            paths:
+              - .
+  build-frontend:
+    working_directory: ~/repo
+    environment:
+        REACT_APP_API_ENDPOINT_PATH: https://team8.api-dena-bootcamp.tracks.run
+    docker:
+      - image: cimg/node:16.14.2
+    steps:
+      - attach_workspace:
+          at: /tmp/output
+      - checkout
+      - restore_cache:
+          keys:
+            - node-dependencies-{{ checksum "frontend/package.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm install
+          working_directory: frontend
+      - save_cache:
+          key: node-dependencies-{{ checksum "frontend/package.json" }}
+          paths:
+            - "frontend/node_modules"
+      - run:
+          name: Build
+          command: npm run build
+          working_directory: frontend
+      - run:
+          name: Prepare for docker build
+          command: |
+            frontend=/tmp/output/frontend
+            mkdir $frontend
+            cp -r frontend/build $frontend
+      - persist_to_workspace:
+            root: /tmp/output
+            paths:
+              - .
+  deploy-backend:
+    executor: aws-cli/default
+    steps:
+      - aws-cli/setup
+      - aws-ecs/update-service:
+          cluster-name: dena-training-2023
+          service-name: dena-training-2023-team0-backend
+          family: dena-training-2023-team0
+          container-image-name-updates: "container=web,tag=$(echo $CIRCLE_SHA1 | cut -c 1-8)"
+          verify-revision-is-deployed: true
+          max-poll-attempts: 100
+  deploy-frontend:
+    executor: aws-cli/default
+    steps:
+      - attach_workspace:
+          at: /tmp/output
+      - aws-cli/setup
+      - aws-s3/sync:
+          from: /tmp/output/frontend/build
+          to: 's3://dena-training-2023/team0'
+
+workflows:
+  # build:
+  #   jobs:
+  #     - build-backend:
+  #         filters:
+  #           branches:
+  #             ignore:
+  #               - master
+  #               - main
+  build:
+    jobs:
+      - build-backend:
+          filters:
+            branches:
+              only:
+                # - main
+                - day5
+      - build-frontend:
+          requires:
+            - build-backend
+      - aws-ecr/build-and-push-image:
+          name: ecr-push-backend
+          checkout: false
+          executor: custom-ecr
+          setup-remote-docker: true
+          remote-docker-version: default
+          repo: dena-training-2023-team0-backend
+          tag: "latest,$(echo $CIRCLE_SHA1 | cut -c 1-8)"
+          attach-workspace: true
+          workspace-root: /tmp/output
+          path: /tmp/output/backend
+          requires:
+            - build-frontend
+      - deploy-backend:
+          requires:
+            - ecr-push-backend
+      - deploy-frontend:
+          requires:
+            - build-frontend
