@@ -112,12 +112,7 @@ workflows:
   #               - main
   build:
     jobs:
-      - build-backend:
-          filters:
-            branches:
-              only:
-                # - main
-                - day5
+      - build-backend
       - build-frontend:
           requires:
             - build-backend
@@ -135,8 +130,18 @@ workflows:
           requires:
             - build-backend
       - deploy-backend:
+          filters:
+            branches:
+              only:
+                # - main
+                - day5
           requires:
             - ecr-push-backend
       - deploy-frontend:
+          filters:
+            branches:
+              only:
+                # - main
+                - day5
           requires:
             - build-frontend
