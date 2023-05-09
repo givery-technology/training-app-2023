@@ -1,0 +1,23 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.app-post-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 1rem;
+  padding: 1rem;
+
+  .app-post-list__header {
+    border-bottom: 1px solid $gray-300;
+  }
+
+  .app-post-list__body {
+    padding-bottom: 3rem;
+
+    .app-post-list-item {
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-300;
+      }
+    }
+  }
+}

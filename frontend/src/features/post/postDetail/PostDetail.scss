@@ -1,0 +1,46 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.app-post-detail {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 1rem;
+  padding: 1rem;
+
+  .app-post-detail__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $gray-300;
+
+    .app-post-detail__header-dates {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .app-post-detail__header-date {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .app-post-detail__header-date-label {
+      color: $gray-500;
+    }
+  }
+
+  .app-post-detail__body {
+    padding-bottom: 1rem;
+    white-space: pre-wrap;
+  }
+
+  .app-post-detail__footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .app-post-detail__footer-user {
+      padding: 0.5rem 1rem;
+      background: $blue-100;
+    }
+  }
+}
