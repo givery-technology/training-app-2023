@@ -1,0 +1,23 @@
+.app-post-edit {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 1rem;
+  padding: 1rem;
+
+  .app-post-edit__form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1.5rem;
+
+    .app-c-textarea {
+      min-height: 20rem;
+    }
+  }
+
+  .app-post-edit__footer {
+    display: flex;
+    gap: 1rem;
+  }
+}

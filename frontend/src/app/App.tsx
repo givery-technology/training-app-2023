@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { ToastContainer } from './partials';
 import { AppRoute } from './AppRoute';
 import { Header } from './Header';
 import { useAppDispatch, useAppSelector } from '../shared/hooks';
 import { APIService } from '../shared/services';
+
 import './App.scss';
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
         </div>
         <div className="app-body">{ready && <AppRoute />}</div>{' '}
       </main>
+      <ToastContainer />
     </div>
   );
 }
