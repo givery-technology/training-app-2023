@@ -86,7 +86,7 @@ jobs:
       - aws-cli/setup
       - aws-ecs/update-service:
           cluster-name: dena-training-2023
-          service-name: dena-training-2023-team0-backend
+          service-name: dena-training-2023-team0
           family: dena-training-2023-team0
           container-image-name-updates: "container=backend,tag=$(echo $CIRCLE_SHA1 | cut -c 1-8)"
           verify-revision-is-deployed: true
