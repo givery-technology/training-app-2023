@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	myConfig "myapp/internal/config"
 
 	"github.com/gin-contrib/cors"
@@ -8,6 +9,7 @@ import (
 )
 
 func Cors() gin.HandlerFunc {
+	fmt.Println("CorsAllowOrigin: ", myConfig.CorsAllowOrigin)
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{myConfig.CorsAllowOrigin}
 	config.AllowCredentials = true
