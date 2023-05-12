@@ -1,0 +1,13 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.app-post-list-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+
+  .app-post-list-item__footer {
+    display: flex;
+    gap: 1rem;
+    align-self: flex-end;
+  }
+}

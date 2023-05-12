@@ -22,5 +22,5 @@ func SetupDB() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	DB = db
+	DB = db.Debug()
 }

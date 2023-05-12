@@ -10,4 +10,6 @@ func SetupRoutes(app *gin.Engine) {
 		ctx.String(200, "It works")
 	})
 	app.GET("/hello", controllers.HelloWorld)
+	app.GET("/posts", controllers.ListPosts)
+	app.GET("/posts/:id", controllers.GetPost)
 }

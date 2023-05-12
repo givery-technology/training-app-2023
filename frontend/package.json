@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.2.3",
     "classnames": "^2.3.2",
+    "dayjs": "^1.11.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -30,5 +31,8 @@
     "sass": "^1.62.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
