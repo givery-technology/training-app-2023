@@ -48,7 +48,7 @@ jobs:
   build-frontend:
     working_directory: ~/repo
     environment:
-        REACT_APP_API_ENDPOINT_PATH: https://team8.api-dena-bootcamp.tracks.run
+        VITE_API_ENDPOINT_PATH: https://$TEAM-bk.bootcamp3.tracks-shibuya.tokyo
     docker:
       - image: cimg/node:16.14.2
     steps:
@@ -86,8 +86,8 @@ jobs:
       - aws-cli/setup
       - aws-ecs/update-service:
           cluster-name: dena-training-2023
-          service-name: dena-training-2023-team0-5
-          family: dena-training-2023-team0
+          service-name: dena-training-2023-$TEAM-5
+          family: dena-training-2023-$TEAM
           container-image-name-updates: "container=backend,tag=$(echo $CIRCLE_SHA1 | cut -c 1-8)"
           verify-revision-is-deployed: true
           max-poll-attempts: 100
@@ -99,17 +99,9 @@ jobs:
       - aws-cli/setup
       - aws-s3/sync:
           from: /tmp/output/frontend/dist
-          to: 's3://dena-training-2023/team0'
+          to: 's3://dena-training-2023/$TEAM'
 
 workflows:
-  # build:
-  #   jobs:
-  #     - build-backend:
-  #         filters:
-  #           branches:
-  #             ignore:
-  #               - master
-  #               - main
   build:
     jobs:
       - build-backend
@@ -122,7 +114,7 @@ workflows:
           executor: custom-ecr
           setup-remote-docker: true
           remote-docker-version: default
-          repo: dena-training-2023-team0-backend
+          repo: dena-training-2023-$TEAM-backend
           tag: "latest,$(echo $CIRCLE_SHA1 | cut -c 1-8)"
           attach-workspace: true
           workspace-root: /tmp/output
@@ -134,7 +126,7 @@ workflows:
             branches:
               only:
                 # - main
-                - day5
+                - day5-basic
           requires:
             - ecr-push-backend
       - deploy-frontend:
@@ -142,6 +134,6 @@ workflows:
             branches:
               only:
                 # - main
-                - day5
+                - day5-basic
           requires:
             - build-frontend
