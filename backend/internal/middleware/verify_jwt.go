@@ -2,13 +2,14 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
-	"gorm.io/gorm"
 	"myapp/internal/config"
 	"myapp/internal/entities"
 	"myapp/internal/repositories"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+	"gorm.io/gorm"
 )
 
 func VerifyJwt() gin.HandlerFunc {
@@ -68,7 +69,7 @@ func isSafeRequest(ctx *gin.Context) bool {
 	if method != "GET" {
 		return false
 	}
-	if path == "/" || path == "/posts" {
+	if path == "/" || path == "/posts" || path == "/basic" {
 		return true
 	}
 	if strings.HasPrefix(path, "/posts/") {
