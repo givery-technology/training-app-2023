@@ -47,8 +47,6 @@ jobs:
               - .
   build-frontend:
     working_directory: ~/repo
-    environment:
-        VITE_API_ENDPOINT_PATH: https://$TEAM-bk.bootcamp3.tracks-shibuya.tokyo
     docker:
       - image: cimg/node:16.14.2
     steps:
@@ -68,7 +66,7 @@ jobs:
             - "frontend/node_modules"
       - run:
           name: Build
-          command: npm run build
+          command: VITE_API_ENDPOINT_PATH="https://$TEAM-bk.bootcamp3.tracks-shibuya.tokyo" npm run build
           working_directory: frontend
       - run:
           name: Prepare for docker build
