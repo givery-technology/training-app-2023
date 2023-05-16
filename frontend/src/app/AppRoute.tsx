@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { HelloWorld } from '../features/helloworld';
+import { PostList } from '../features/post/PostList';
 
 export const AppRoute = () => {
   return (
     <Routes>
-      <Route path="/" element={<HelloWorld />} />
+      <Route path="/" element={<PostList />} />
     </Routes>
   );
 };
