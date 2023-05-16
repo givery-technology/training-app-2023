@@ -1,0 +1,18 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.app-signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  padding-top: 5rem;
+
+  .app-signin__form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 20rem;
+  }
+}
