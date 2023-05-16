@@ -1,0 +1,21 @@
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+
+  .post-list__selected-post {
+    border: 1px solid #e0e0e0;
+    padding: 1rem;
+  }
+
+  .post-list__list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e0e0e0;
+
+    > div:not(:last-child) {
+      border-bottom: 1px solid #e0e0e0;
+    }
+  }
+}

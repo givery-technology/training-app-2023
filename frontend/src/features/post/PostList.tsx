@@ -2,13 +2,15 @@ import { PostListItem } from "./PostListItem";
 import { useAppSelector } from "../../shared/hooks";
 import { dummy } from "../../shared/models/Dummy";
 
+import "./PostList.scss";
+
 export const PostList = () => {
   const { selectedPost } = useAppSelector((state) => state.app);
 
   return (
-    <div>
+    <div className="post-list">
       PostList
-      <div>
+      <div className="post-list__selected-post">
         <div>Selected Post</div>
         {selectedPost ? (
           <PostListItem post={selectedPost} />
@@ -16,7 +18,7 @@ export const PostList = () => {
           "Not Selected Yet"
         )}
       </div>
-      <div>
+      <div className="post-list__list">
         {dummy.map((post) => (
           <PostListItem
             key={post.id}

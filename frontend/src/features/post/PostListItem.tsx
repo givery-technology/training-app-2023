@@ -2,6 +2,8 @@ import { useAppDispatch } from "../../shared/hooks";
 import { actions } from "../../shared/store";
 import { Dummy } from "../../shared/models/Dummy";
 
+import "./PostListItem.scss";
+
 export type PostListItemProps = {
   post: Dummy;
   isHighlighted?: boolean;
@@ -14,11 +16,12 @@ export const PostListItem = (props: PostListItemProps) => {
 
   return (
     <div
-    style={{ background: isHighlighted ? "yellow" : "" }}
-    onClick={() => {
-      dispatch(actions.setSelectedPost({ post }));
-    }}
-  >
+      className="post-list-item"
+      style={{ background: isHighlighted ? "yellow" : "" }}
+      onClick={() => {
+        dispatch(actions.setSelectedPost({ post }));
+      }}
+    >
       <div>{post.id}</div>
       <div>{post.title}</div>
       <div>{post.content}</div>
