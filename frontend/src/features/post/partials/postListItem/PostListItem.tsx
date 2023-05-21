@@ -20,7 +20,7 @@ export function PostListItem(props: PostListItemProps) {
         </h3>
       </div>
       <div className="app-post-list-item__footer">
-        <div>{post.user_name}</div>
+        <div>{post.username}</div>
         <div>
           更新日時:
           <time dateTime={post?.created_at}>

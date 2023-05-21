@@ -39,6 +39,35 @@ export const getPost = createAsyncThunk<Post, number>(
   }
 );
 
+export const createPost = createAsyncThunk<
+  Post,
+  { title: string; body: string }
+>('createPost', async (body) => {
+  return await customFetch(`${API_ENDPOINT_PATH}/posts`, {
+    method: 'post',
+    body: JSON.stringify(body),
+  });
+});
+
+export const updatePost = createAsyncThunk<
+  Post,
+  { postId: number; title: string; body: string }
+>('updatePost', async ({ postId, ...body }) => {
+  return await customFetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
+    method: 'put',
+    body: JSON.stringify(body),
+  });
+});
+
+export const deletePost = createAsyncThunk<Post, number>(
+  'deletePost',
+  async (postId) => {
+    return await customFetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
+      method: 'delete',
+    });
+  }
+);
+
 export const signIn = createAsyncThunk<
   User,
   { username: string; password: string }

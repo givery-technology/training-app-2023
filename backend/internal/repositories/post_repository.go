@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"myapp/internal/entities"
 	"myapp/internal/interfaces"
+	"time"
 )
 
 type PostRepository struct {
@@ -53,7 +54,7 @@ func (r *PostRepository) List(cond *interfaces.PostSearchCondition, limitOffset 
 		"posts.created_at",
 		"posts.updated_at",
 		"users.name",
-	}).Joins("INNER JOIN users ON users.id = posts.user_id")
+	}).Joins("INNER JOIN users ON users.id = posts.user_id").Where("posts.deleted_at IS NULL")
 	if cond != nil {
 		query = applyPostSearchCondition(cond, query)
 	}
@@ -99,6 +100,45 @@ func (r *PostRepository) Get(id entities.PostId) (*entities.Post, error) {
 		return nil, nil
 	}
 	return result[0], nil
+}
+
+func (r *PostRepository) Create(input *entities.PostCreateInput) (*entities.Post, error) {
+	post := Post{
+		Title:  input.Title,
+		Body:   input.Body,
+		UserId: uint(input.UserId),
+	}
+	result := r.Conn.Create(&post)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return r.Get(entities.PostId(post.ID))
+}
+
+func (r *PostRepository) Update(post *entities.Post, input *entities.PostUpdateInput) (*entities.Post, error) {
+	update := Post{
+		Model: gorm.Model{
+			ID:        uint(post.Id),
+			CreatedAt: post.CreatedAt,
+			UpdatedAt: time.Now(),
+		},
+		Title:  input.Title,
+		Body:   input.Body,
+		UserId: uint(post.UserId),
+	}
+	result := r.Conn.Save(&update)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return r.Get(entities.PostId(post.Id))
+}
+
+func (r *PostRepository) Delete(post *entities.Post) error {
+	delete := Post{
+		Model: gorm.Model{ID: uint(post.Id)},
+	}
+	result := r.Conn.Delete(&delete)
+	return result.Error
 }
 
 func convertPostRepositoryModelToEntity(v *PostAndUser) *entities.Post {

@@ -3,7 +3,7 @@ export type PostList = {
   title: string;
   body: string;
   user_id: number;
-  user_name: string;
+  username: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -13,7 +13,7 @@ export type Post = {
   title: string;
   body: string;
   user_id: number;
-  user_name: string;
+  username: string;
   created_at?: string;
   updated_at?: string;
 };
