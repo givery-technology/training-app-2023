@@ -88,7 +88,7 @@ func (r *PostRepository) Count(cond *interfaces.PostSearchCondition) (int, error
 	return int(count), nil
 }
 
-func (r *PostRepository) Get(id entities.PostId) (*entities.Post, error) {
+func (r *PostRepository) Get(id entities.PostId, includeComments bool) (*entities.Post, error) {
 	cond := interfaces.PostSearchCondition{
 		Id: &id,
 	}
@@ -99,7 +99,15 @@ func (r *PostRepository) Get(id entities.PostId) (*entities.Post, error) {
 	if len(result) == 0 {
 		return nil, nil
 	}
-	return result[0], nil
+	post := result[0]
+	if includeComments {
+		comments, err := NewCommentRepository(r.Conn).List(id)
+		if err != nil {
+			return nil, err
+		}
+		post.Comments = comments
+	}
+	return post, nil
 }
 
 func (r *PostRepository) Create(input *entities.PostCreateInput) (*entities.Post, error) {
@@ -112,7 +120,7 @@ func (r *PostRepository) Create(input *entities.PostCreateInput) (*entities.Post
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return r.Get(entities.PostId(post.ID))
+	return r.Get(entities.PostId(post.ID), false)
 }
 
 func (r *PostRepository) Update(post *entities.Post, input *entities.PostUpdateInput) (*entities.Post, error) {
@@ -130,7 +138,7 @@ func (r *PostRepository) Update(post *entities.Post, input *entities.PostUpdateI
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return r.Get(entities.PostId(post.Id))
+	return r.Get(entities.PostId(post.Id), true)
 }
 
 func (r *PostRepository) Delete(post *entities.Post) error {

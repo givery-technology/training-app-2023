@@ -16,5 +16,5 @@ func NewGetPostUsecase(r interfaces.PostRepository) *GetPostUsecase {
 }
 
 func (u *GetPostUsecase) Execute(id entities.PostId) (*entities.Post, error) {
-	return u.repository.Get(id)
+	return u.repository.Get(id, true)
 }

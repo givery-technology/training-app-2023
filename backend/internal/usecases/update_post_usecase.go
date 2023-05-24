@@ -17,7 +17,7 @@ func NewUpdatePostUsecase(r interfaces.PostRepository) *UpdatePostUsecase {
 }
 
 func (u *UpdatePostUsecase) Execute(user *entities.User, postId entities.PostId, input *entities.PostUpdateInput) (*entities.Post, error) {
-	post, err := u.repository.Get(postId)
+	post, err := u.repository.Get(postId, false)
 	if err != nil {
 		return nil, err
 	}

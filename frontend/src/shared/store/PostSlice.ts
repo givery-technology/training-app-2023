@@ -62,6 +62,27 @@ export const postSlice = createSlice({
     builder.addCase(APIService.deletePost.rejected, (state) => {
       state.submitting = false;
     });
+
+    builder.addCase(APIService.createComment.fulfilled, (state, action) => {
+      state.post?.comments.push(action.payload);
+    });
+
+    builder.addCase(APIService.updateComment.fulfilled, (state, action) => {
+      if (state.post) {
+        state.post.comments = state.post.comments.map((comment) =>
+          comment.id === action.payload.id ? action.payload : comment
+        );
+      }
+    });
+
+    builder.addCase(APIService.deleteComment.fulfilled, (state, action) => {
+      const commentId = action.meta.arg;
+      if (state.post) {
+        state.post.comments = state.post?.comments.filter((comment) => {
+          return comment.id !== commentId;
+        });
+      }
+    });
   },
 });
 
